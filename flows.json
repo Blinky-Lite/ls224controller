@@ -172,7 +172,7 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Init flow Variables",
-        "func": "var trayProps = {\n    box         :   env.get(\"BOX\"),\n    type        :   env.get(\"TRAY_TYPE\"),\n};\nflow.set('trayProps',trayProps);\nflow.set('settingInProgress', true);\nflow.set('traysConfig',[]);\nreturn {topic: \"getTrayProps\", payload: true};  \n",
+        "func": "var trayProps = {\n    box         :   env.get(\"BOX\"),\n    type        :   env.get(\"TRAY_TYPE\"),\n    curveType   :   \"ls224Curve\"\n};\nflow.set('trayProps',trayProps);\nflow.set('settingInProgress', true);\nflow.set('traysConfig',[]);\nflow.set('crvHdrs',[]);\nreturn {topic: \"getTrayProps\", payload: true};  \n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -247,7 +247,7 @@
         "z": "7cbe116050851432",
         "name": "",
         "pauseType": "delay",
-        "timeout": "30",
+        "timeout": "40",
         "timeoutUnits": "seconds",
         "rate": "1",
         "nbRateUnits": "1",
@@ -286,7 +286,8 @@
         "name": "request tray echo in",
         "links": [
             "063def90cca3eae3",
-            "55b54f13100eb833"
+            "55b54f13100eb833",
+            "6d157e7e74fbe682"
         ],
         "x": 1535,
         "y": 200,
@@ -364,11 +365,16 @@
                 "t": "eq",
                 "v": "reloadTrays",
                 "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "crvLoader",
+                "vt": "str"
             }
         ],
         "checkall": "true",
         "repair": false,
-        "outputs": 5,
+        "outputs": 6,
         "x": 660,
         "y": 380,
         "wires": [
@@ -386,6 +392,9 @@
             ],
             [
                 "4bc813284823bae3"
+            ],
+            [
+                "cba84809f48fd7da"
             ]
         ]
     },
@@ -394,7 +403,7 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Filter MQTT",
-        "func": "let trayprops = flow.get('trayProps');\nlet mqttTopic = msg.topic.split('/')\nlet trayName = mqttTopic[3];\nlet actionTopic = mqttTopic[5];\nif (trayName == \"admin\")\n{\n    if (actionTopic == 'setting') actionTopic = 'reloadTrays'\n    return {topic:actionTopic, payload:msg.payload};\n}\nif (actionTopic == 'echo')\n{\n    return {topic:'echo', payload:msg.payload};\n}\nlet traysConfig = flow.get('traysConfig');\nlet trayConfig = null;\nfor (let ii = 0; ii < traysConfig.length; ++ii)\n{\n    if (traysConfig[ii].tray.name == trayName)  trayConfig = traysConfig[ii];\n}\nif (trayConfig ==  null) return null;\nreturn {topic:actionTopic, payload:msg.payload, trayConfig:trayConfig};\n",
+        "func": "let trayprops = flow.get('trayProps');\nlet mqttTopic = msg.topic.split('/')\nlet trayName = mqttTopic[3];\nlet actionTopic = mqttTopic[5];\nif (trayName == \"admin\")\n{\n    if (actionTopic == 'setting')\n    {\n        if (msg.payload.cube == \"reloadTrays\")\n        {\n            actionTopic = 'reloadTrays'\n            return {topic:actionTopic, payload:msg.payload};\n        }\n        else\n        {\n            flow.set('settingInProgress', true);\n            actionTopic = 'crvLoader'\n            return {topic:actionTopic, payload:msg.payload};\n        }\n    }\n}\nif (actionTopic == 'echo')\n{\n    return {topic:'echo', payload:msg.payload};\n}\nlet traysConfig = flow.get('traysConfig');\nlet trayConfig = null;\nfor (let ii = 0; ii < traysConfig.length; ++ii)\n{\n    if (traysConfig[ii].tray.name == trayName)  trayConfig = traysConfig[ii];\n}\nif (trayConfig ==  null) return null;\nreturn {topic:actionTopic, payload:msg.payload, trayConfig:trayConfig};\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
@@ -414,8 +423,8 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Save Trays in flow",
-        "func": "let trayprops = flow.get('trayProps');\nlet tray = msg.payload;\nif (tray.name == 'admin')\n{\n    tray.reloadTrays.value = 0;\n    tray.watchdog.value = 0;\n    flow.set('adminTray', tray);\n    return null;\n}\nlet traysConfig = flow.get('traysConfig');\ntray.trayControl.value = 0;\nlet index = -1;\nfor (let itray in traysConfig)\n{\n    if ((traysConfig[itray].tray.type == tray.type) && (traysConfig[itray].tray.name == tray.name))\n    {\n        index = Number(itray);\n    }\n}\nif (index < 0)\n{\n    traysConfig.push({tray:tray, archiveTime:tray.timeStamp, cubeType:\"cube\"});\n}\nelse\n{\n    traysConfig[index] = {tray:tray, archiveTime:tray.timeStamp, cubeType:\"cube\"};\n}\n//node.warn(flow.get('traysConfig'));\nreturn msg;\n",
-        "outputs": 1,
+        "func": "let trayprops = flow.get('trayProps');\nlet tray = msg.payload;\nif (tray.name == 'admin')\n{\n    tray.reloadTrays.value = 0;\n    tray.watchdog.value = 0;\n    flow.set('adminTray', tray);\n    return [null,msg];\n}\nlet traysConfig = flow.get('traysConfig');\ntray.trayControl.value = 0;\nlet index = -1;\nfor (let itray in traysConfig)\n{\n    if ((traysConfig[itray].tray.type == tray.type) && (traysConfig[itray].tray.name == tray.name))\n    {\n        index = Number(itray);\n    }\n}\nif (index < 0)\n{\n    traysConfig.push({tray:tray, archiveTime:tray.timeStamp, cubeType:\"cube\"});\n}\nelse\n{\n    traysConfig[index] = {tray:tray, archiveTime:tray.timeStamp, cubeType:\"cube\"};\n}\n//node.warn(flow.get('traysConfig'));\nreturn [msg,null];\n",
+        "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
@@ -425,7 +434,10 @@
         "y": 500,
         "wires": [
             [
-                "296923afd82e6beb"
+                "c91f7ed9805df0bb"
+            ],
+            [
+                "cf3ee87038d0eda2"
             ]
         ]
     },
@@ -438,7 +450,7 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 1965,
+        "x": 1975,
         "y": 820,
         "wires": []
     },
@@ -471,7 +483,10 @@
             "cffe9c2a52b1e43e",
             "db68a00ed2d7ce63",
             "87f76838d7e80f8d",
-            "938e10b962484b58"
+            "938e10b962484b58",
+            "e8fae8cef018ce21",
+            "73efade75225a543",
+            "6095e5c1fec8b996"
         ],
         "x": 1075,
         "y": 260,
@@ -610,7 +625,7 @@
             "ce5672e1f22d7692"
         ],
         "x": 985,
-        "y": 300,
+        "y": 260,
         "wires": []
     },
     {
@@ -620,10 +635,10 @@
         "name": "Tray Setting In",
         "mode": "link",
         "links": [
-            "644bd24ad5c779d2"
+            "653f0c77a2bf5160"
         ],
         "x": 985,
-        "y": 260,
+        "y": 220,
         "wires": []
     },
     {
@@ -631,7 +646,7 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Create Setting",
-        "func": "let tray = msg.trayConfig.tray;\nlet mqttMsg = null;\nlet normalSettingMsg = {topic:'settingDone', payload:tray};\nlet trayControlMessage = null;\nlet trayProps  = flow.get('trayProps');\n\nlet icube = msg.trayConfig.blinkybusSettingCubes.indexOf(msg.payload.cube);\n\nif (icube >= 0)\n{\n    let cube = msg.trayConfig.tray[msg.payload.cube];\n    cube.value = msg.payload.value;\n    let bufsize = 4;\n    let buffer = new ArrayBuffer(bufsize);\n    let settingsView = new DataView(buffer);\n    settingsView.setUint8(0, 1); //setting\n    settingsView.setUint8(1, cube.blinkybus.address); //address\n    settingsView.setInt16(2, Math.round(cube.value * cube.blinkybus.scale), true); //value\n    mqttMsg = {topic: trayProps.box + \"/\" + msg.trayConfig.cubeType + \"/\" + tray.type + \"/\" + tray.name + \"/setting\", payload:Buffer.from(buffer)};\n}\nelse\n{\n    switch (msg.payload.cube) \n    {\n        case 'alias':\n            tray.alias.value = msg.payload.value;\n        break;\n        case 'trayControl':\n            switch(msg.payload.value)\n            {\n                case 0:\n                    tray.trayControl.value = 0;\n                    break;\n                case 1:\n                    tray.trayControl.value = -1;\n                    break;\n                case 2:\n                    if (tray.trayControl.value > 0)\n                    {\n                        tray.trayControl.value = 2;\n                        trayControlMessage =\n                        {\n                            topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/echo',\n                            payload: JSON.stringify({ topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/setting/echo' })\n                        };\n                    }\n                    break;\n                default:\n                    tray.trayControl.value = 0;\n                    break;\n             }\n        break;\n        default:\n            break;\n    }\n}\nreturn [mqttMsg, normalSettingMsg, trayControlMessage];",
+        "func": "let tray = msg.trayConfig.tray;\nlet ls224Msg = null;\nlet normalSettingMsg = {topic:'settingDone', payload:tray};\nlet trayControlMessage = null;\nlet trayProps  = flow.get('trayProps');\n\nswitch (msg.payload.cube) \n{\n    case 'sensorType':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'autorange':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'range':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'compensation':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'units':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'crvNo':\n        tray[msg.payload.cube].value = msg.payload.value;\n        tray.crvSerialNo.value = flow.get('crvHdrs')[msg.payload.value].name;\n        let cmd = \"INCRV \" + tray.name + \",\" + msg.payload.value.toString() + \"\\n\";\n        ls224Msg = {topic:\"INCRV\", payload:cmd};\n        flow.set('settingInProgress', true);\n    break;\n    case 'alias':\n        tray.alias.value = msg.payload.value;\n    break;\n    case 'trayControl':\n        switch(msg.payload.value)\n        {\n            case 0:\n                tray.trayControl.value = 0;\n                break;msg.payload.value\n            case 1:\n                tray.trayControl.value = -1;\n                break;\n            case 2:\n                if (tray.trayControl.value > 0)\n                {\n                    tray.trayControl.value = 2;\n                    trayControlMessage =\n                    {\n                        topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/echo',\n                        payload: JSON.stringify({ topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/setting/echo' })\n                    };\n                }\n                break;\n            default:\n                tray.trayControl.value = 0;\n                break;\n            }\n    break;\n    default:\n        break;\n}\n\nreturn [ls224Msg, normalSettingMsg, trayControlMessage];\nfunction setIntype(tray)\n{\n    let intypeDat = \"INTYPE \" + tray.name;\n    intypeDat = intypeDat + \",\" + tray.sensorType.value.toString();\n    intypeDat = intypeDat + \",\" + tray.autorange.value.toString();\n    intypeDat = intypeDat + \",\" + tray.range.value.toString();\n    intypeDat = intypeDat + \",\" + tray.compensation.value.toString();\n    intypeDat = intypeDat + \",\" + tray.units.value.toString();\n    intypeDat = intypeDat + \"\\n\";\n    return{topic:\"INTYPE\", payload:intypeDat};\n}",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
@@ -771,9 +786,10 @@
         "name": "Init flow Variables out",
         "mode": "link",
         "links": [
-            "83a5bccd57b9c2a0"
+            "83a5bccd57b9c2a0",
+            "38475c702e1ee736"
         ],
-        "x": 385,
+        "x": 295,
         "y": 140,
         "wires": []
     },
@@ -787,7 +803,7 @@
             "f882c2407b2620be"
         ],
         "x": 985,
-        "y": 340,
+        "y": 300,
         "wires": []
     },
     {
@@ -810,23 +826,6 @@
         ]
     },
     {
-        "id": "362667398568db22",
-        "type": "debug",
-        "z": "7cbe116050851432",
-        "name": "debug 12",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2500,
-        "y": 500,
-        "wires": []
-    },
-    {
         "id": "296923afd82e6beb",
         "type": "delay",
         "z": "7cbe116050851432",
@@ -843,7 +842,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1030,
+        "x": 1230,
         "y": 500,
         "wires": [
             [
@@ -863,7 +862,7 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1220,
+        "x": 1420,
         "y": 500,
         "wires": [
             [
@@ -882,7 +881,7 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1390,
+        "x": 1590,
         "y": 500,
         "wires": [
             [
@@ -907,7 +906,7 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 1530,
+        "x": 1730,
         "y": 500,
         "wires": [
             [
@@ -931,7 +930,7 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 1850,
+        "x": 2050,
         "y": 500,
         "wires": [
             [
@@ -952,7 +951,7 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1700,
+        "x": 1900,
         "y": 500,
         "wires": [
             [
@@ -965,33 +964,14 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "parse init",
-        "func": "msg.tray.crvNo.value = Number(msg.payload[0]);\nlet intypeText = msg.payload[1].split(\",\");\nlet intypeDat = [];\nfor (let idat in intypeText)\n{\n    intypeDat.push(Number(intypeText[idat]));\n}\nmsg.tray.sensorType.value = intypeDat[0];\nmsg.tray.autorange.value = intypeDat[1];\nmsg.tray.range.value = intypeDat[2];\nmsg.tray.compensation.value = intypeDat[3];\nmsg.tray.units.value = intypeDat[4];\nmsg.tray.temp.value =  Number(msg.payload[2]);\nmsg.payload = \"CRVHDR? \" + msg.tray.crvNo.value.toString() + \"\\n\"\nreturn msg;",
-        "outputs": 1,
-        "noerr": 0,
-        "initialize": "",
-        "finalize": "",
-        "libs": [],
-        "x": 1980,
-        "y": 500,
-        "wires": [
-            [
-                "58ddd0f8435376e6"
-            ]
-        ]
-    },
-    {
-        "id": "72028237a5a65768",
-        "type": "function",
-        "z": "7cbe116050851432",
-        "name": "parse crv",
-        "func": "msg.tray.crvSerialNo.value = msg.payload.split(\",\")[0].trim();\nlet traysConfig = flow.get('traysConfig');\nfor (let itray in traysConfig)\n{\n    if (traysConfig[itray].tray.name == msg.tray.name)\n    {\n        traysConfig[itray].tray = JSON.parse(JSON.stringify(msg.tray));\n    }\n}\nreturn {topic:msg.tray.name, payload:msg.tray};",
+        "func": "msg.tray.crvNo.value = Number(msg.payload[0]);\nlet intypeText = msg.payload[1].split(\",\");\nlet intypeDat = [];\nfor (let idat in intypeText)\n{\n    intypeDat.push(Number(intypeText[idat]));\n}\nmsg.tray.sensorType.value = intypeDat[0];\nmsg.tray.autorange.value = intypeDat[1];\nmsg.tray.range.value = intypeDat[2];\nmsg.tray.compensation.value = intypeDat[3];\nmsg.tray.units.value = intypeDat[4];\nmsg.tray.temp.value =  Number(msg.payload[2]);\nmsg.tray.crvSerialNo.value = flow.get('crvHdrs')[msg.tray.crvNo.value].name;\nlet traysConfig = flow.get('traysConfig');\nfor (let itray in traysConfig)\n{\n    if (traysConfig[itray].tray.name == msg.tray.name)\n    {\n        traysConfig[itray].tray = JSON.parse(JSON.stringify(msg.tray));\n    }\n}\nreturn {topic:msg.tray.name, payload:msg.tray};\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2340,
+        "x": 2180,
         "y": 500,
         "wires": [
             []
@@ -1011,14 +991,14 @@
                 "vt": "str"
             }
         ],
-        "repeat": "3",
+        "repeat": "4",
         "crontab": "",
         "once": true,
         "onceDelay": "20",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 650,
+        "x": 670,
         "y": 880,
         "wires": [
             [
@@ -1152,32 +1132,7 @@
         "y": 820,
         "wires": [
             [
-                "772f10cbbe5228a4"
-            ]
-        ]
-    },
-    {
-        "id": "772f10cbbe5228a4",
-        "type": "delay",
-        "z": "7cbe116050851432",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": true,
-        "outputs": 1,
-        "x": 1850,
-        "y": 820,
-        "wires": [
-            [
-                "cffe9c2a52b1e43e"
+                "2418c2d62f88a96c"
             ]
         ]
     },
@@ -1196,31 +1151,6 @@
         "y": 920,
         "wires": [
             [
-                "2583d706542c2445"
-            ]
-        ]
-    },
-    {
-        "id": "2583d706542c2445",
-        "type": "delay",
-        "z": "7cbe116050851432",
-        "name": "",
-        "pauseType": "rate",
-        "timeout": "5",
-        "timeoutUnits": "seconds",
-        "rate": "1",
-        "nbRateUnits": "1",
-        "rateUnits": "second",
-        "randomFirst": "1",
-        "randomLast": "5",
-        "randomUnits": "seconds",
-        "drop": false,
-        "allowrate": true,
-        "outputs": 1,
-        "x": 1850,
-        "y": 920,
-        "wires": [
-            [
                 "0dba75772bcd5ea0"
             ]
         ]
@@ -1234,30 +1164,9 @@
         "links": [
             "ce5672e1f22d7692"
         ],
-        "x": 1965,
+        "x": 1975,
         "y": 920,
         "wires": []
-    },
-    {
-        "id": "58ddd0f8435376e6",
-        "type": "tcp request",
-        "z": "7cbe116050851432",
-        "name": "ls224Controller",
-        "server": "$(CONTROLLER_IP)",
-        "port": "$(CONTROLLER_PORT)",
-        "out": "char",
-        "ret": "string",
-        "splitc": "\\n",
-        "newline": "",
-        "trim": false,
-        "tls": "",
-        "x": 2160,
-        "y": 500,
-        "wires": [
-            [
-                "72028237a5a65768"
-            ]
-        ]
     },
     {
         "id": "41fe54f6bf77f142",
@@ -1277,6 +1186,1054 @@
         "wires": [
             [
                 "8fcf8b1607847b92"
+            ]
+        ]
+    },
+    {
+        "id": "3d54f7153d2ff801",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "4",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1180,
+        "y": 160,
+        "wires": [
+            [
+                "da1dbfa8289ecf35",
+                "d8f8e2ba9b614d16"
+            ]
+        ]
+    },
+    {
+        "id": "d8f8e2ba9b614d16",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 1360,
+        "y": 160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f6fb53f8885978d2",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Allow readings",
+        "func": "flow.set('settingInProgress', false);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 100,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "da1dbfa8289ecf35",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "2",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1340,
+        "y": 100,
+        "wires": [
+            [
+                "f6fb53f8885978d2"
+            ]
+        ]
+    },
+    {
+        "id": "653f0c77a2bf5160",
+        "type": "link in",
+        "z": "7cbe116050851432",
+        "name": "Tray Setting out",
+        "links": [
+            "baed8fbe731e1cf0"
+        ],
+        "x": 1075,
+        "y": 160,
+        "wires": [
+            [
+                "3d54f7153d2ff801"
+            ]
+        ]
+    },
+    {
+        "id": "cf3ee87038d0eda2",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Get crvHeadrs",
+        "func": "let cmd = [];\nfor (let ii = 1; ii < 60; ++ii)\n{\n    cmd.push(\"CRVHDR? \" + ii.toString() + \"\\n\");\n}\nreturn {topic:'getCrvHdrs',payload:cmd, rate:150};\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1260,
+        "y": 560,
+        "wires": [
+            [
+                "b1e7c47922cc0b1d"
+            ]
+        ]
+    },
+    {
+        "id": "b1e7c47922cc0b1d",
+        "type": "split",
+        "z": "7cbe116050851432",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1410,
+        "y": 560,
+        "wires": [
+            [
+                "2995820eddf6a49f"
+            ]
+        ]
+    },
+    {
+        "id": "2995820eddf6a49f",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": true,
+        "outputs": 1,
+        "x": 1550,
+        "y": 560,
+        "wires": [
+            [
+                "18021fe9aca5009f"
+            ]
+        ]
+    },
+    {
+        "id": "da33ea547c463faa",
+        "type": "join",
+        "z": "7cbe116050851432",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1870,
+        "y": 560,
+        "wires": [
+            [
+                "37247dfcaaf93b16"
+            ]
+        ]
+    },
+    {
+        "id": "18021fe9aca5009f",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 1720,
+        "y": 560,
+        "wires": [
+            [
+                "da33ea547c463faa"
+            ]
+        ]
+    },
+    {
+        "id": "37247dfcaaf93b16",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "parseHeader",
+        "func": "flow.set('crvHdrs',[]);\nflow.get('crvHdrs').push({name: \"none\", serialNo: \"none\", format:0, maxTemp: 0, slopeType:0});\nfor (let ihdr in msg.payload)\n{\n    let parse = msg.payload[ihdr].split(\",\");\n    let data = {name: parse[0].trim(), serialNo: parse[1].trim(), format:Number(parse[2]), maxTemp: Number(parse[3]), slopeType:Number(parse[4])};\n    flow.get('crvHdrs').push(data);\n}\nreturn null;",
+        "outputs": 0,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2010,
+        "y": 560,
+        "wires": []
+    },
+    {
+        "id": "957364260ab8a221",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2340,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c91f7ed9805df0bb",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "15",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1060,
+        "y": 500,
+        "wires": [
+            [
+                "296923afd82e6beb"
+            ]
+        ]
+    },
+    {
+        "id": "389b69ae7487912a",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1660,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "9e89e044950bcf26",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "MQTT subscribe topic",
+        "func": "let subscribeTopic = flow.get('trayProps').box + \"/tray/\" + flow.get('trayProps').curveType +\"/+/setting/#\";\nreturn {action:\"subscribe\",topic:subscribeTopic};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 240,
+        "y": 1180,
+        "wires": [
+            [
+                "be302195aea2c0ed"
+            ]
+        ]
+    },
+    {
+        "id": "be302195aea2c0ed",
+        "type": "mqtt in",
+        "z": "7cbe116050851432",
+        "name": "Subscribe Settings",
+        "topic": "",
+        "qos": "0",
+        "datatype": "auto",
+        "broker": "84d80994.260508",
+        "nl": false,
+        "rap": false,
+        "inputs": 1,
+        "x": 460,
+        "y": 1180,
+        "wires": [
+            [
+                "7c34a55d5edab068"
+            ]
+        ]
+    },
+    {
+        "id": "7c34a55d5edab068",
+        "type": "json",
+        "z": "7cbe116050851432",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 640,
+        "y": 1180,
+        "wires": [
+            [
+                "bbdf01d50c55a80e"
+            ]
+        ]
+    },
+    {
+        "id": "38475c702e1ee736",
+        "type": "link in",
+        "z": "7cbe116050851432",
+        "name": "CurveSubscribeSetup",
+        "links": [
+            "1849ea2986414070"
+        ],
+        "x": 95,
+        "y": 1180,
+        "wires": [
+            [
+                "9e89e044950bcf26"
+            ]
+        ]
+    },
+    {
+        "id": "6d157e7e74fbe682",
+        "type": "link out",
+        "z": "7cbe116050851432",
+        "name": "adminMsg Out",
+        "mode": "link",
+        "links": [
+            "f882c2407b2620be"
+        ],
+        "x": 665,
+        "y": 580,
+        "wires": []
+    },
+    {
+        "id": "cba84809f48fd7da",
+        "type": "switch",
+        "z": "7cbe116050851432",
+        "name": "",
+        "property": "payload.cube",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "crvNo",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "loadCrv",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "loadCrvSerialNo",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "loadCrvNo",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 4,
+        "x": 250,
+        "y": 620,
+        "wires": [
+            [
+                "dd33e6fc1a7c7121"
+            ],
+            [
+                "53cf397582c979a6"
+            ],
+            [
+                "692f910b4e27dab4"
+            ],
+            [
+                "692f910b4e27dab4"
+            ]
+        ]
+    },
+    {
+        "id": "dd33e6fc1a7c7121",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "crvNo",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.crvNo.value = msg.payload.value;\nlet crvHdr = flow.get('crvHdrs')[msg.payload.value];\n\nlet trayProps  = flow.get('trayProps');\n\nlet getCrvMsg =\n{\n    topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].name + '/echo',\n    payload: { topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].name + '/setting/crvNo' }\n};\nreturn getCrvMsg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 600,
+        "wires": [
+            [
+                "6d157e7e74fbe682"
+            ]
+        ]
+    },
+    {
+        "id": "bbdf01d50c55a80e",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Filter MQTT",
+        "func": "let mqttTopic = msg.topic.split('/')\nlet trayName = mqttTopic[3];\nlet actionTopic = mqttTopic[5];\nmsg['actionTopic'] = actionTopic;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1180,
+        "wires": [
+            [
+                "6384744119d200e4"
+            ]
+        ]
+    },
+    {
+        "id": "6384744119d200e4",
+        "type": "switch",
+        "z": "7cbe116050851432",
+        "name": "",
+        "property": "actionTopic",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "loadCrv",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "crvNo",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 930,
+        "y": 1180,
+        "wires": [
+            [
+                "a9353251398aa294"
+            ],
+            [
+                "437b41b9eca65af7"
+            ]
+        ]
+    },
+    {
+        "id": "437b41b9eca65af7",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Update AdminTray",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.serialNo.value = msg.payload.serialNo.value;\nadminTray.format.value = msg.payload.format.value;\nadminTray.maxTemp.value = msg.payload.maxTemp.value;\nadminTray.slopeType.value = msg.payload.slopeType.value;\nadminTray.serialNo.value = msg.payload.serialNo.value;\nadminTray.crvName.value = msg.payload.name;\nadminTray.crv.value = JSON.parse(JSON.stringify(msg.payload.crv.value));\nflow.set('settingInProgress', false);\nreturn {topic:'adminTray', payload:adminTray};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1090,
+        "y": 1180,
+        "wires": [
+            [
+                "e8fae8cef018ce21"
+            ]
+        ]
+    },
+    {
+        "id": "e8fae8cef018ce21",
+        "type": "link out",
+        "z": "7cbe116050851432",
+        "name": "update adminTray out 2",
+        "mode": "link",
+        "links": [
+            "6b45b4c31fad6b8b"
+        ],
+        "x": 1255,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "73efade75225a543",
+        "type": "link out",
+        "z": "7cbe116050851432",
+        "name": "update adminTray out 1",
+        "mode": "link",
+        "links": [
+            "6b45b4c31fad6b8b"
+        ],
+        "x": 665,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "53cf397582c979a6",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "loadCrv",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.loadCrv.value = msg.payload.value;\n\nlet updateMqttMsg = {topic:\"adminTray\",payload:adminTray};\n\nlet trayProps  = flow.get('trayProps');\nlet getCrvMsg = null;\nif (msg.payload.value > 0)\n{\n    getCrvMsg =\n    {\n        topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + adminTray.loadCrvSerialNo.value + '/echo',\n        payload: { topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + adminTray.loadCrvSerialNo.value + '/setting/loadCrv' }\n    };\n}\nreturn [getCrvMsg,updateMqttMsg];\n",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 660,
+        "wires": [
+            [
+                "f459f63e95435038",
+                "6d157e7e74fbe682"
+            ],
+            [
+                "73efade75225a543"
+            ]
+        ]
+    },
+    {
+        "id": "f459f63e95435038",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "4",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 400,
+        "y": 720,
+        "wires": [
+            [
+                "56cbbe2fe0d0e94f"
+            ]
+        ]
+    },
+    {
+        "id": "56cbbe2fe0d0e94f",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "reset loadCrv",
+        "func": "if (flow.get('loadingCurve')) return null;\nlet adminTray = flow.get('adminTray');\nadminTray.loadCrv.value = 0;\nflow.set('settingInProgress', false);\n\nreturn {topic:\"adminTray\",payload:adminTray};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 780,
+        "wires": [
+            [
+                "73efade75225a543"
+            ]
+        ]
+    },
+    {
+        "id": "a9353251398aa294",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Load Curve",
+        "func": "flow.set('loadingCurve', true);\nlet adminTray = flow.get('adminTray');\nlet cmd = [];\nlet headerCmd = \"CRVHDR \" + adminTray.loadCrvNo.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.name;\nheaderCmd = headerCmd + \",\" + msg.payload.serialNo.value\nheaderCmd = headerCmd + \",\" + msg.payload.format.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.maxTemp.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.slopeType.value.toString();\nheaderCmd = headerCmd + \"\\n\";\ncmd.push(headerCmd);\n\n\nlet crvHeader = flow.get('crvHdrs')[adminTray.loadCrvNo.value];\ncrvHeader.name = msg.payload.name;\ncrvHeader.serialNo =  msg.payload.serialNo.value;\ncrvHeader.format = msg.payload.format.value;\ncrvHeader.maxTemp = msg.payload.maxTemp.value;\ncrvHeader.slopeType = msg.payload.slopeType.value;\n\nlet crv = JSON.parse(JSON.stringify(msg.payload));\n\nfor (let ii = 0; ii < msg.payload.crv.value[0].length; ++ii)\n{\n    let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n    ptCommand = ptCommand + \",\" + (ii + 1).toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[0][ii].toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[1][ii].toString();\n    ptCommand = ptCommand + \"\\n\";\n    cmd.push(ptCommand);\n}\nif (msg.payload.crv.value[0].length < 199)\n{\n    for (let ii = msg.payload.crv.value[0].length; ii < 200; ++ii)\n    {\n        let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n        ptCommand = ptCommand + \",\" + (ii + 1).toString();\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \"\\n\";\n        cmd.push(ptCommand);\n    }\n}\nreturn {topic:\"loadCrv\", payload:cmd, rate:100, crv:crv};\n\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1070,
+        "y": 1120,
+        "wires": [
+            [
+                "e5d89e5ed9284bce"
+            ]
+        ]
+    },
+    {
+        "id": "e5d89e5ed9284bce",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1220,
+        "y": 1120,
+        "wires": [
+            [
+                "55ae80c209c5c3f8"
+            ]
+        ]
+    },
+    {
+        "id": "55ae80c209c5c3f8",
+        "type": "split",
+        "z": "7cbe116050851432",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1350,
+        "y": 1120,
+        "wires": [
+            [
+                "f5423df11cb7301c"
+            ]
+        ]
+    },
+    {
+        "id": "f5423df11cb7301c",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": true,
+        "outputs": 1,
+        "x": 1490,
+        "y": 1120,
+        "wires": [
+            [
+                "d348a0877f44c157",
+                "a6240f53adfc5095"
+            ]
+        ]
+    },
+    {
+        "id": "d348a0877f44c157",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Check for end",
+        "func": "if (msg.parts.index < 200) return null;\nlet adminTray = flow.get('adminTray');\nadminTray.loadCrv.value = 0;\nadminTray.crvNo.value = adminTray.loadCrvNo.value;\nadminTray.crvName.value = msg.crv.name;\nadminTray.serialNo.value = msg.crv.serialNo.value;\nadminTray.format.value = msg.crv.format.value;\nadminTray.maxTemp.value = msg.crv.maxTemp.value;\nadminTray.slopeType.value = msg.crv.slopeType.value;\nadminTray.crv.value = JSON.parse(JSON.stringify(msg.crv.crv.value));\nflow.set('settingInProgress', false);\nflow.set('loadingCurve', false);\n\nreturn {topic:\"adminTray\",payload:adminTray};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1660,
+        "y": 1060,
+        "wires": [
+            [
+                "6095e5c1fec8b996"
+            ]
+        ]
+    },
+    {
+        "id": "6095e5c1fec8b996",
+        "type": "link out",
+        "z": "7cbe116050851432",
+        "name": "update adminTray out 3",
+        "mode": "link",
+        "links": [
+            "6b45b4c31fad6b8b"
+        ],
+        "x": 1785,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "71ca84216edb79aa",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "CRVHDR?",
+        "func": "flow.set('settingInProgress', true);\nlet adminTray = flow.get('adminTray');\nlet cmd = \"CRVHDR? \" + adminTray.crvNo.value.toString() + \"\\n\"\nreturn {topic:'test',payload:cmd,crvNo:adminTray.crvNo.value};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1320,
+        "wires": [
+            [
+                "07c17a08f92d9036"
+            ]
+        ]
+    },
+    {
+        "id": "e9373e33a10dd8ec",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1880,
+        "y": 1320,
+        "wires": []
+    },
+    {
+        "id": "f9703540f15762d4",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "pasrseHeader",
+        "func": "let parse = msg.payload.split(\",\");\nlet entry = \n{\n    type: 'lakeShore224Curve',\n    name: parse[0].trim(),\n    arcPeriod: 60000,\n    timeStamp: new Date().getTime(),\n    serialNo: {\n        action: 'setting',\n        type: 'string',\n        value: parse[1].trim()\n    },\n    format: {\n        action: 'setting',\n        type: 'scalar',\n        unit: '',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 5,\n                hihi: 5\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[2]),\n    },\n    maxTemp: {\n        action: 'setting',\n        type: 'scalar',\n        unit: 'K',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 500,\n                hihi: 500\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[3]),\n    },\n    slopeType: {\n        action: 'setting',\n        type: 'scalar',\n        unit: '',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 3,\n                hihi: 3\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[4]),\n    },\n    crv: {\n        action: 'setting',\n        type: 'vector',\n        value: [[],[]]\n    }\n\n}\nmsg['entry'] = entry;\nlet ptCommand = [];\nfor (let ii = 1; ii < 200; ++ii)\n{\n    ptCommand.push(\"CRVPT? \" + msg.crvNo.toString() + \", \" + ii.toString() + \"\\n\");\n}\nmsg.payload = ptCommand\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 860,
+        "y": 1320,
+        "wires": [
+            [
+                "b7cf4d34fc38b735"
+            ]
+        ]
+    },
+    {
+        "id": "b7cf4d34fc38b735",
+        "type": "split",
+        "z": "7cbe116050851432",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 1010,
+        "y": 1320,
+        "wires": [
+            [
+                "26b586a71526b5ea"
+            ]
+        ]
+    },
+    {
+        "id": "258ab5d5fde9e468",
+        "type": "join",
+        "z": "7cbe116050851432",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1470,
+        "y": 1320,
+        "wires": [
+            [
+                "4ca5dc032fe47c0f"
+            ]
+        ]
+    },
+    {
+        "id": "4ca5dc032fe47c0f",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Join curve",
+        "func": "let ptsX = [];\nlet ptsY = [];\nfor (let ii in msg.payload)\n{\n    let stringPair = msg.payload[ii].split(\",\");\n    let pt = [Number(stringPair[0]), Number(stringPair[1])];\n    if(pt[0] > 0.0) \n    {\n        msg.entry.crv.value[0].push(pt[0]);\n        msg.entry.crv.value[1].push(pt[1]);\n    }  \n}\nflow.set('settingInProgress', false);\n//msg.entry.crv.value[0].push(0);\n//msg.entry.crv.value[1].push(0);\nreturn {topic:\"test\",payload:JSON.stringify(msg.entry)};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1610,
+        "y": 1320,
+        "wires": [
+            [
+                "1a038a6a570f23b1"
+            ]
+        ]
+    },
+    {
+        "id": "26b586a71526b5ea",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "0.1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1150,
+        "y": 1320,
+        "wires": [
+            [
+                "74a4bdf5c1fafbf7"
+            ]
+        ]
+    },
+    {
+        "id": "1a038a6a570f23b1",
+        "type": "json",
+        "z": "7cbe116050851432",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 1750,
+        "y": 1320,
+        "wires": [
+            [
+                "e9373e33a10dd8ec"
+            ]
+        ]
+    },
+    {
+        "id": "2d507fd8c8759f56",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 680,
+        "y": 1320,
+        "wires": [
+            [
+                "f9703540f15762d4"
+            ]
+        ]
+    },
+    {
+        "id": "74a4bdf5c1fafbf7",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 1320,
+        "y": 1320,
+        "wires": [
+            [
+                "258ab5d5fde9e468"
+            ]
+        ]
+    },
+    {
+        "id": "91019604c6619793",
+        "type": "inject",
+        "z": "7cbe116050851432",
+        "name": "Read curve",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 210,
+        "y": 1320,
+        "wires": [
+            [
+                "71ca84216edb79aa"
+            ]
+        ]
+    },
+    {
+        "id": "07c17a08f92d9036",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 520,
+        "y": 1320,
+        "wires": [
+            [
+                "2d507fd8c8759f56"
+            ]
+        ]
+    },
+    {
+        "id": "a6240f53adfc5095",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 1700,
+        "y": 1120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "2418c2d62f88a96c",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Setting Blocker",
+        "func": "if (flow.get('settingInProgress')) return null;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1860,
+        "y": 820,
+        "wires": [
+            [
+                "cffe9c2a52b1e43e"
+            ]
+        ]
+    },
+    {
+        "id": "692f910b4e27dab4",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "loadCrvParam",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray[msg.payload.cube].value = msg.payload.value;\nflow.set('settingInProgress', false);\nreturn {topic:\"adminTray\",payload:adminTray};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 840,
+        "wires": [
+            [
+                "73efade75225a543"
             ]
         ]
     },
@@ -1990,6 +2947,7 @@
         "name": "pasrseHeader",
         "func": "let parse = msg.payload.split(\",\");\nlet entry = \n{\n    type: 'lakeShore224Curve',\n    name: parse[0].trim(),\n    arcPeriod: 60000,\n    timeStamp: new Date().getTime(),\n    serialNo: {\n        action: 'setting',\n        type: 'string',\n        value: parse[1].trim()\n    },\n    format: {\n        action: 'setting',\n        type: 'scalar',\n        unit: '',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 5,\n                hihi: 5\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[2]),\n    },\n    maxTemp: {\n        action: 'setting',\n        type: 'scalar',\n        unit: 'K',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 500,\n                hihi: 500\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[3]),\n    },\n    slopeType: {\n        action: 'setting',\n        type: 'scalar',\n        unit: '',\n        alarm: {\n            value: 0,\n            limits: {\n                lolo: 0,\n                low: 0,\n                high: 3,\n                hihi: 3\n            },\n            notify: {\n                name: '',\n                number: '',\n                time: 0\n            }\n        },\n        value: Number(parse[4]),\n    },\n    crv: {\n        action: 'setting',\n        type: 'vector',\n        value: [[],[]]\n    }\n\n}\nmsg['entry'] = entry;\nlet ptCommand = [];\nfor (let ii = 0; ii < 200; ++ii)\n{\n    ptCommand.push(\"CRVPT? \" + msg.crvNo.toString() + \", \" + ii.toString() + \"\\n\");\n}\nmsg.payload = ptCommand\nreturn msg;",
         "outputs": 1,
+        "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
