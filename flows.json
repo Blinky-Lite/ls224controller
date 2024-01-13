@@ -238,7 +238,7 @@
             "f882c2407b2620be"
         ],
         "x": 775,
-        "y": 20,
+        "y": 40,
         "wires": []
     },
     {
@@ -258,8 +258,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 880,
-        "y": 80,
+        "x": 860,
+        "y": 100,
         "wires": [
             [
                 "175febc97e8ae24a"
@@ -289,8 +289,8 @@
             "55b54f13100eb833",
             "6d157e7e74fbe682"
         ],
-        "x": 1535,
-        "y": 200,
+        "x": 1885,
+        "y": 180,
         "wires": [
             [
                 "05f1df43d04e1ad1"
@@ -309,8 +309,8 @@
         "nl": false,
         "rap": false,
         "inputs": 1,
-        "x": 140,
-        "y": 380,
+        "x": 410,
+        "y": 360,
         "wires": [
             [
                 "f812bb6a.1aec68"
@@ -325,8 +325,8 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 320,
-        "y": 380,
+        "x": 590,
+        "y": 360,
         "wires": [
             [
                 "e0d2b8e49c2e469b"
@@ -375,8 +375,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 6,
-        "x": 660,
-        "y": 380,
+        "x": 930,
+        "y": 360,
         "wires": [
             [
                 "ce7c14e281a023dc"
@@ -410,8 +410,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 480,
-        "y": 380,
+        "x": 750,
+        "y": 360,
         "wires": [
             [
                 "f9be9054ce456982"
@@ -430,8 +430,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 500,
+        "x": 1190,
+        "y": 480,
         "wires": [
             [
                 "c91f7ed9805df0bb"
@@ -450,8 +450,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 1975,
-        "y": 820,
+        "x": 1435,
+        "y": 940,
         "wires": []
     },
     {
@@ -466,8 +466,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1350,
-        "y": 260,
+        "x": 1710,
+        "y": 240,
         "wires": [
             [
                 "05f1df43d04e1ad1"
@@ -488,8 +488,8 @@
             "73efade75225a543",
             "6095e5c1fec8b996"
         ],
-        "x": 1075,
-        "y": 260,
+        "x": 1435,
+        "y": 240,
         "wires": [
             [
                 "e3bf1ffa191c317f"
@@ -507,8 +507,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1350,
-        "y": 320,
+        "x": 1710,
+        "y": 300,
         "wires": [
             [
                 "81a2eeceab4079a2"
@@ -524,8 +524,8 @@
             "0dba75772bcd5ea0",
             "db68a00ed2d7ce63"
         ],
-        "x": 1075,
-        "y": 320,
+        "x": 1435,
+        "y": 300,
         "wires": [
             [
                 "c0c0f2e784c5886e"
@@ -549,8 +549,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1500,
-        "y": 320,
+        "x": 1860,
+        "y": 300,
         "wires": [
             [
                 "05f1df43d04e1ad1"
@@ -569,8 +569,8 @@
         "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastAlarm', -1);",
         "finalize": "",
         "libs": [],
-        "x": 1190,
-        "y": 260,
+        "x": 1550,
+        "y": 240,
         "wires": [
             [
                 "d029d546e79dc7cc"
@@ -588,8 +588,8 @@
         "initialize": "// Code added here will be run once\n// whenever the node is started.\ncontext.set('lastAlarm', -1);",
         "finalize": "",
         "libs": [],
-        "x": 1190,
-        "y": 320,
+        "x": 1550,
+        "y": 300,
         "wires": [
             [
                 "03302d45194b1091"
@@ -610,8 +610,8 @@
         "correl": "",
         "expiry": "",
         "broker": "84d80994.260508",
-        "x": 1670,
-        "y": 260,
+        "x": 2050,
+        "y": 240,
         "wires": []
     },
     {
@@ -624,8 +624,8 @@
             "6b45b4c31fad6b8b",
             "ce5672e1f22d7692"
         ],
-        "x": 985,
-        "y": 260,
+        "x": 1335,
+        "y": 240,
         "wires": []
     },
     {
@@ -637,8 +637,8 @@
         "links": [
             "653f0c77a2bf5160"
         ],
-        "x": 985,
-        "y": 220,
+        "x": 1335,
+        "y": 200,
         "wires": []
     },
     {
@@ -646,15 +646,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Create Setting",
-        "func": "let tray = msg.trayConfig.tray;\nlet ls224Msg = null;\nlet normalSettingMsg = {topic:'settingDone', payload:tray};\nlet trayControlMessage = null;\nlet trayProps  = flow.get('trayProps');\n\nswitch (msg.payload.cube) \n{\n    case 'sensorType':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'autorange':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'range':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'compensation':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'units':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'crvNo':\n        tray[msg.payload.cube].value = msg.payload.value;\n        tray.crvSerialNo.value = flow.get('crvHdrs')[msg.payload.value].name;\n        let cmd = \"INCRV \" + tray.name + \",\" + msg.payload.value.toString() + \"\\n\";\n        ls224Msg = {topic:\"INCRV\", payload:cmd};\n        flow.set('settingInProgress', true);\n    break;\n    case 'alias':\n        tray.alias.value = msg.payload.value;\n    break;\n    case 'trayControl':\n        switch(msg.payload.value)\n        {\n            case 0:\n                tray.trayControl.value = 0;\n                break;msg.payload.value\n            case 1:\n                tray.trayControl.value = -1;\n                break;\n            case 2:\n                if (tray.trayControl.value > 0)\n                {\n                    tray.trayControl.value = 2;\n                    trayControlMessage =\n                    {\n                        topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/echo',\n                        payload: JSON.stringify({ topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/setting/echo' })\n                    };\n                }\n                break;\n            default:\n                tray.trayControl.value = 0;\n                break;\n            }\n    break;\n    default:\n        break;\n}\n\nreturn [ls224Msg, normalSettingMsg, trayControlMessage];\nfunction setIntype(tray)\n{\n    let intypeDat = \"INTYPE \" + tray.name;\n    intypeDat = intypeDat + \",\" + tray.sensorType.value.toString();\n    intypeDat = intypeDat + \",\" + tray.autorange.value.toString();\n    intypeDat = intypeDat + \",\" + tray.range.value.toString();\n    intypeDat = intypeDat + \",\" + tray.compensation.value.toString();\n    intypeDat = intypeDat + \",\" + tray.units.value.toString();\n    intypeDat = intypeDat + \"\\n\";\n    return{topic:\"INTYPE\", payload:intypeDat};\n}",
+        "func": "let tray = msg.trayConfig.tray;\nlet ls224Msg = null;\nlet normalSettingMsg = {topic:'settingDone', payload:tray};\nlet trayControlMessage = null;\nlet trayProps  = flow.get('trayProps');\n\nswitch (msg.payload.cube) \n{\n    case 'sensorType':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'autorange':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'range':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'compensation':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'units':\n        tray[msg.payload.cube].value = msg.payload.value;\n        ls224Msg = setIntype(tray);\n        flow.set('settingInProgress', true);\n    break;\n    case 'crvNo':\n        tray[msg.payload.cube].value = msg.payload.value;\n        tray.crvSerialNo.value = flow.get('crvHdrs')[msg.payload.value].name;\n        let cmd = \"INCRV \" + tray.name + \",\" + msg.payload.value.toString() + \"\\n\";\n        let cmdRead = \"INCRV? \" + tray.name + \"\\n\";\n        ls224Msg = {topic:\"INCRV\", payload:cmd, read:{topic:\"INCRV\",payload:cmdRead, tray:tray}};\n        flow.set('settingInProgress', true);\n    break;\n    case 'alias':\n        tray.alias.value = msg.payload.value;\n    break;\n    case 'trayControl':\n        switch(msg.payload.value)\n        {\n            case 0:\n                tray.trayControl.value = 0;\n                break;msg.payload.value\n            case 1:\n                tray.trayControl.value = -1;\n                break;\n            case 2:\n                if (tray.trayControl.value > 0)\n                {\n                    tray.trayControl.value = 2;\n                    trayControlMessage =\n                    {\n                        topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/echo',\n                        payload: JSON.stringify({ topic: trayProps.box + '/tray/' + tray.type + '/' + tray.name + '/setting/echo' })\n                    };\n                }\n                break;\n            default:\n                tray.trayControl.value = 0;\n                break;\n            }\n    break;\n    default:\n        break;\n}\n\nreturn [ls224Msg, normalSettingMsg, trayControlMessage];\nfunction setIntype(tray)\n{\n    let intypeDat = \"INTYPE \" + tray.name;\n    intypeDat = intypeDat + \",\" + tray.sensorType.value.toString();\n    intypeDat = intypeDat + \",\" + tray.autorange.value.toString();\n    intypeDat = intypeDat + \",\" + tray.range.value.toString();\n    intypeDat = intypeDat + \",\" + tray.compensation.value.toString();\n    intypeDat = intypeDat + \",\" + tray.units.value.toString();\n    intypeDat = intypeDat + \"\\n\";\n    let cmdRead = \"INTYPE? \" + tray.name + \"\\n\";\n    return{topic:\"INTYPE\", payload:intypeDat, read:{topic:\"INTYPE\",payload:cmdRead, tray:tray}};\n}",
         "outputs": 3,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
-        "y": 280,
+        "x": 1180,
+        "y": 260,
         "wires": [
             [
                 "baed8fbe731e1cf0"
@@ -678,8 +678,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
-        "y": 440,
+        "x": 1180,
+        "y": 420,
         "wires": [
             [
                 "938e10b962484b58"
@@ -697,8 +697,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 810,
-        "y": 380,
+        "x": 1160,
+        "y": 360,
         "wires": [
             [
                 "87f76838d7e80f8d"
@@ -714,8 +714,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 985,
-        "y": 380,
+        "x": 1335,
+        "y": 360,
         "wires": []
     },
     {
@@ -727,8 +727,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 985,
-        "y": 440,
+        "x": 1335,
+        "y": 420,
         "wires": []
     },
     {
@@ -742,8 +742,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 830,
-        "y": 560,
+        "x": 1180,
+        "y": 540,
         "wires": [
             [
                 "e6b2a65ac7c0f8e7"
@@ -759,8 +759,8 @@
         "links": [
             "a2b6f8c1cd78afa6"
         ],
-        "x": 985,
-        "y": 560,
+        "x": 1335,
+        "y": 540,
         "wires": []
     },
     {
@@ -802,8 +802,8 @@
         "links": [
             "f882c2407b2620be"
         ],
-        "x": 985,
-        "y": 300,
+        "x": 1335,
+        "y": 280,
         "wires": []
     },
     {
@@ -818,7 +818,7 @@
         "finalize": "",
         "libs": [],
         "x": 160,
-        "y": 320,
+        "y": 360,
         "wires": [
             [
                 "5023092b.a0fe38"
@@ -842,8 +842,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1230,
-        "y": 500,
+        "x": 1750,
+        "y": 440,
         "wires": [
             [
                 "d5ddd78d90f4b117"
@@ -855,15 +855,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Get Init Values",
-        "func": "let tray = msg.payload;\nlet cmd = [];\ncmd.push(\"INCRV? \" + tray.name + \"\\n\");\ncmd.push(\"INTYPE? \" + tray.name + \"\\n\");\ncmd.push(\"KRDG? \" + tray.name + \"\\n\");\nreturn {topic:'getInit',payload:cmd, rate:150, tray:tray};\n",
+        "func": "let tray = msg.payload;\nlet cmd = [];\ncmd.push(\"INCRV? \" + tray.name + \"\\n\");\ncmd.push(\"INTYPE? \" + tray.name + \"\\n\");\ncmd.push(\"KRDG? \" + tray.name + \"\\n\");\nreturn {topic:'getInit',payload:cmd, rate:200, tray:tray};\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1420,
-        "y": 500,
+        "x": 1940,
+        "y": 440,
         "wires": [
             [
                 "374724da41899bfb"
@@ -881,8 +881,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1590,
-        "y": 500,
+        "x": 2110,
+        "y": 440,
         "wires": [
             [
                 "7df59157d4adae25"
@@ -906,8 +906,8 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 1730,
-        "y": 500,
+        "x": 2250,
+        "y": 440,
         "wires": [
             [
                 "5e74fa2ad7db22d6"
@@ -930,8 +930,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 2050,
-        "y": 500,
+        "x": 2570,
+        "y": 440,
         "wires": [
             [
                 "3e394f64d0667554"
@@ -951,8 +951,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1900,
-        "y": 500,
+        "x": 2420,
+        "y": 440,
         "wires": [
             [
                 "0721ef646e544905"
@@ -971,8 +971,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2180,
-        "y": 500,
+        "x": 2700,
+        "y": 440,
         "wires": [
             []
         ]
@@ -994,12 +994,12 @@
         "repeat": "4",
         "crontab": "",
         "once": true,
-        "onceDelay": "20",
+        "onceDelay": "10",
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 670,
-        "y": 880,
+        "x": 130,
+        "y": 1000,
         "wires": [
             [
                 "f75d43e6f5e90c7c"
@@ -1011,15 +1011,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "KRDG?",
-        "func": "if (flow.get('settingInProgress')) return null;\nlet traysConfig = flow.get('traysConfig');\nlet cmd = [];\nfor (let itray in traysConfig)\n{\n    cmd.push(\"KRDG? \" + traysConfig[itray].tray.name + \"\\n\");\n}\nreturn {topic:'krdg',payload:cmd, rate:150};\n",
+        "func": "if (flow.get('settingInProgress')) return null;\nlet traysConfig = flow.get('traysConfig');\nlet cmd = [];\nfor (let itray in traysConfig)\n{\n    cmd.push(\"KRDG? \" + traysConfig[itray].tray.name + \"\\n\");\n}\nreturn {topic:'krdg',payload:cmd, rate:200};\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 840,
-        "y": 880,
+        "x": 300,
+        "y": 1000,
         "wires": [
             [
                 "845925c4e5ebbbfc"
@@ -1037,8 +1037,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 970,
-        "y": 880,
+        "x": 430,
+        "y": 1000,
         "wires": [
             [
                 "7196970d0e0b2619"
@@ -1062,8 +1062,8 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 1110,
-        "y": 880,
+        "x": 570,
+        "y": 1000,
         "wires": [
             [
                 "41fe54f6bf77f142"
@@ -1086,8 +1086,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 1430,
-        "y": 880,
+        "x": 890,
+        "y": 1000,
         "wires": [
             [
                 "4caff1879bc62adb"
@@ -1099,15 +1099,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "parse krdg",
-        "func": "let traysConfig = flow.get('traysConfig');\nlet trays = [];\nlet archiveTrays = [];\nfor (let ichan in msg.payload)\n{\n    traysConfig[ichan].tray.temp.value = Number(msg.payload[ichan]);\n    traysConfig[ichan].tray.timeStamp = new Date().getTime();\n    if ((traysConfig[ichan].tray.timeStamp - traysConfig[ichan].archiveTime) > traysConfig[ichan].tray.arcPeriod)\n    {\n        traysConfig[ichan].archiveTime = traysConfig[ichan].tray.timeStamp;\n        archiveTrays.push(traysConfig[ichan].tray);\n    }\n    trays.push(traysConfig[ichan].tray);\n}\nlet adminTray = flow.get('adminTray');\nadminTray.watchdog.value = adminTray.watchdog.value + 1;\nif (adminTray.watchdog.value > 32765) adminTray.watchdog.value = 1;\nadminTray.timestamp = new Date().getTime();\ntrays.push(adminTray);\nlet archiveMsg = null;\nif (archiveTrays.length > 0)\n{\n    if (traysConfig[0].tray.name == archiveTrays[0].name) archiveTrays.push(adminTray);\n    archiveMsg = {topic:\"archiveTrays\", payload:archiveTrays, rate:150}\n}\nreturn [{topic:\"trays\", payload:trays, rate:150},archiveMsg];\n\n",
+        "func": "let traysConfig = flow.get('traysConfig');\nlet trays = [];\nlet archiveTrays = [];\nfor (let ichan in msg.payload)\n{\n    traysConfig[ichan].tray.temp.value = Number(msg.payload[ichan]);\n    traysConfig[ichan].tray.timeStamp = new Date().getTime();\n    if ((traysConfig[ichan].tray.timeStamp - traysConfig[ichan].archiveTime) > traysConfig[ichan].tray.arcPeriod)\n    {\n        traysConfig[ichan].archiveTime = traysConfig[ichan].tray.timeStamp;\n        archiveTrays.push(traysConfig[ichan].tray);\n    }\n    trays.push(traysConfig[ichan].tray);\n}\nlet adminTray = flow.get('adminTray');\nadminTray.watchdog.value = adminTray.watchdog.value + 1;\nif (adminTray.watchdog.value > 32765) adminTray.watchdog.value = 1;\nadminTray.timestamp = new Date().getTime();\ntrays.push(adminTray);\nlet archiveMsg = null;\nif (archiveTrays.length > 0)\n{\n    if (traysConfig[0].tray.name == archiveTrays[0].name) archiveTrays.push(adminTray);\n    archiveMsg = {topic:\"archiveTrays\", payload:archiveTrays, rate:150}\n}\nreturn [{topic:\"trays\", payload:trays, rate:200},archiveMsg];\n\n",
         "outputs": 2,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1570,
-        "y": 880,
+        "x": 1030,
+        "y": 1000,
         "wires": [
             [
                 "2e010716822fcc73"
@@ -1128,8 +1128,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1710,
-        "y": 820,
+        "x": 1170,
+        "y": 940,
         "wires": [
             [
                 "2418c2d62f88a96c"
@@ -1147,8 +1147,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1710,
-        "y": 920,
+        "x": 1170,
+        "y": 1040,
         "wires": [
             [
                 "0dba75772bcd5ea0"
@@ -1164,8 +1164,8 @@
         "links": [
             "ce5672e1f22d7692"
         ],
-        "x": 1975,
-        "y": 920,
+        "x": 1435,
+        "y": 1040,
         "wires": []
     },
     {
@@ -1181,8 +1181,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1280,
-        "y": 880,
+        "x": 740,
+        "y": 1000,
         "wires": [
             [
                 "8fcf8b1607847b92"
@@ -1195,7 +1195,7 @@
         "z": "7cbe116050851432",
         "name": "",
         "pauseType": "delay",
-        "timeout": "4",
+        "timeout": "1",
         "timeoutUnits": "seconds",
         "rate": "1",
         "nbRateUnits": "1",
@@ -1206,7 +1206,7 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1180,
+        "x": 1540,
         "y": 160,
         "wires": [
             [
@@ -1228,7 +1228,7 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1360,
+        "x": 1720,
         "y": 160,
         "wires": [
             []
@@ -1239,14 +1239,14 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Allow readings",
-        "func": "flow.set('settingInProgress', false);\nreturn msg;",
+        "func": "let traysConfig = flow.get('traysConfig');\nlet tray = null;\nfor (let ii = 0; ii < traysConfig.length; ++ii)\n{\n    if (traysConfig[ii].tray.name == msg.tray.name)  tray = traysConfig[ii].tray;\n}\nswitch (msg.topic) \n{\n    case 'INCRV':\n        tray.crvNo.value = Number(msg.payload);\n        tray.crvSerialNo.value = flow.get('crvHdrs')[tray.crvNo.value].name;\n\n    break;\n    case 'INTYPE':\n        let intypeText = msg.payload.split(\",\");\n        let intypeDat = [];\n        for (let idat in intypeText)\n        {\n            intypeDat.push(Number(intypeText[idat]));\n        }\n        tray.sensorType.value = intypeDat[0];\n        tray.autorange.value = intypeDat[1];\n        tray.range.value = intypeDat[2];\n        tray.compensation.value = intypeDat[3];\n        tray.units.value = intypeDat[4];\n    break;\n}\nflow.set('settingInProgress', false);\nreturn msg;",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1500,
+        "x": 2180,
         "y": 100,
         "wires": [
             []
@@ -1258,7 +1258,7 @@
         "z": "7cbe116050851432",
         "name": "",
         "pauseType": "delay",
-        "timeout": "2",
+        "timeout": "1",
         "timeoutUnits": "seconds",
         "rate": "1",
         "nbRateUnits": "1",
@@ -1269,11 +1269,11 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1340,
+        "x": 1700,
         "y": 100,
         "wires": [
             [
-                "f6fb53f8885978d2"
+                "466a54f0d30d4f68"
             ]
         ]
     },
@@ -1285,7 +1285,7 @@
         "links": [
             "baed8fbe731e1cf0"
         ],
-        "x": 1075,
+        "x": 1435,
         "y": 160,
         "wires": [
             [
@@ -1298,15 +1298,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Get crvHeadrs",
-        "func": "let cmd = [];\nfor (let ii = 1; ii < 60; ++ii)\n{\n    cmd.push(\"CRVHDR? \" + ii.toString() + \"\\n\");\n}\nreturn {topic:'getCrvHdrs',payload:cmd, rate:150};\n",
+        "func": "let cmd = [];\nfor (let ii = 1; ii < 60; ++ii)\n{\n    cmd.push(\"CRVHDR? \" + ii.toString() + \"\\n\");\n}\nreturn {topic:'getCrvHdrs',payload:cmd, rate:200};\n",
         "outputs": 1,
         "timeout": "",
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1260,
-        "y": 560,
+        "x": 1600,
+        "y": 520,
         "wires": [
             [
                 "b1e7c47922cc0b1d"
@@ -1324,8 +1324,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1410,
-        "y": 560,
+        "x": 1750,
+        "y": 520,
         "wires": [
             [
                 "2995820eddf6a49f"
@@ -1349,8 +1349,8 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 1550,
-        "y": 560,
+        "x": 1890,
+        "y": 520,
         "wires": [
             [
                 "18021fe9aca5009f"
@@ -1373,8 +1373,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 1870,
-        "y": 560,
+        "x": 2210,
+        "y": 520,
         "wires": [
             [
                 "37247dfcaaf93b16"
@@ -1394,8 +1394,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1720,
-        "y": 560,
+        "x": 2060,
+        "y": 520,
         "wires": [
             [
                 "da33ea547c463faa"
@@ -1414,25 +1414,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 2010,
-        "y": 560,
-        "wires": []
-    },
-    {
-        "id": "957364260ab8a221",
-        "type": "debug",
-        "z": "7cbe116050851432",
-        "name": "debug 16",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2340,
-        "y": 500,
+        "x": 2350,
+        "y": 520,
         "wires": []
     },
     {
@@ -1452,29 +1435,13 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1060,
-        "y": 500,
+        "x": 1580,
+        "y": 440,
         "wires": [
             [
                 "296923afd82e6beb"
             ]
         ]
-    },
-    {
-        "id": "389b69ae7487912a",
-        "type": "debug",
-        "z": "7cbe116050851432",
-        "name": "debug 14",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "false",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1660,
-        "y": 100,
-        "wires": []
     },
     {
         "id": "9e89e044950bcf26",
@@ -1488,8 +1455,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 240,
-        "y": 1180,
+        "x": 210,
+        "y": 1220,
         "wires": [
             [
                 "be302195aea2c0ed"
@@ -1508,8 +1475,8 @@
         "nl": false,
         "rap": false,
         "inputs": 1,
-        "x": 460,
-        "y": 1180,
+        "x": 430,
+        "y": 1220,
         "wires": [
             [
                 "7c34a55d5edab068"
@@ -1524,8 +1491,8 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 640,
-        "y": 1180,
+        "x": 610,
+        "y": 1220,
         "wires": [
             [
                 "bbdf01d50c55a80e"
@@ -1540,8 +1507,8 @@
         "links": [
             "1849ea2986414070"
         ],
-        "x": 95,
-        "y": 1180,
+        "x": 65,
+        "y": 1220,
         "wires": [
             [
                 "9e89e044950bcf26"
@@ -1557,8 +1524,8 @@
         "links": [
             "f882c2407b2620be"
         ],
-        "x": 665,
-        "y": 580,
+        "x": 1535,
+        "y": 640,
         "wires": []
     },
     {
@@ -1593,8 +1560,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 4,
-        "x": 250,
-        "y": 620,
+        "x": 1160,
+        "y": 740,
         "wires": [
             [
                 "dd33e6fc1a7c7121"
@@ -1622,8 +1589,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 390,
-        "y": 600,
+        "x": 1340,
+        "y": 620,
         "wires": [
             [
                 "6d157e7e74fbe682"
@@ -1642,8 +1609,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 790,
-        "y": 1180,
+        "x": 760,
+        "y": 1220,
         "wires": [
             [
                 "6384744119d200e4"
@@ -1672,8 +1639,8 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 930,
-        "y": 1180,
+        "x": 900,
+        "y": 1220,
         "wires": [
             [
                 "a9353251398aa294"
@@ -1695,8 +1662,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1090,
-        "y": 1180,
+        "x": 1060,
+        "y": 1220,
         "wires": [
             [
                 "e8fae8cef018ce21"
@@ -1712,8 +1679,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 1255,
-        "y": 1180,
+        "x": 1225,
+        "y": 1220,
         "wires": []
     },
     {
@@ -1725,8 +1692,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 665,
-        "y": 640,
+        "x": 1535,
+        "y": 760,
         "wires": []
     },
     {
@@ -1741,8 +1708,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 400,
-        "y": 660,
+        "x": 1350,
+        "y": 680,
         "wires": [
             [
                 "f459f63e95435038",
@@ -1770,8 +1737,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 400,
-        "y": 720,
+        "x": 1350,
+        "y": 740,
         "wires": [
             [
                 "56cbbe2fe0d0e94f"
@@ -1790,8 +1757,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
-        "y": 780,
+        "x": 1360,
+        "y": 800,
         "wires": [
             [
                 "73efade75225a543"
@@ -1803,15 +1770,15 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "Load Curve",
-        "func": "flow.set('loadingCurve', true);\nlet adminTray = flow.get('adminTray');\nlet cmd = [];\nlet headerCmd = \"CRVHDR \" + adminTray.loadCrvNo.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.name;\nheaderCmd = headerCmd + \",\" + msg.payload.serialNo.value\nheaderCmd = headerCmd + \",\" + msg.payload.format.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.maxTemp.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.slopeType.value.toString();\nheaderCmd = headerCmd + \"\\n\";\ncmd.push(headerCmd);\n\n\nlet crvHeader = flow.get('crvHdrs')[adminTray.loadCrvNo.value];\ncrvHeader.name = msg.payload.name;\ncrvHeader.serialNo =  msg.payload.serialNo.value;\ncrvHeader.format = msg.payload.format.value;\ncrvHeader.maxTemp = msg.payload.maxTemp.value;\ncrvHeader.slopeType = msg.payload.slopeType.value;\n\nlet crv = JSON.parse(JSON.stringify(msg.payload));\n\nfor (let ii = 0; ii < msg.payload.crv.value[0].length; ++ii)\n{\n    let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n    ptCommand = ptCommand + \",\" + (ii + 1).toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[0][ii].toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[1][ii].toString();\n    ptCommand = ptCommand + \"\\n\";\n    cmd.push(ptCommand);\n}\nif (msg.payload.crv.value[0].length < 199)\n{\n    for (let ii = msg.payload.crv.value[0].length; ii < 200; ++ii)\n    {\n        let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n        ptCommand = ptCommand + \",\" + (ii + 1).toString();\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \"\\n\";\n        cmd.push(ptCommand);\n    }\n}\nreturn {topic:\"loadCrv\", payload:cmd, rate:100, crv:crv};\n\n",
+        "func": "flow.set('loadingCurve', true);\nlet adminTray = flow.get('adminTray');\nlet cmd = [];\nlet headerCmd = \"CRVHDR \" + adminTray.loadCrvNo.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.name;\nheaderCmd = headerCmd + \",\" + msg.payload.serialNo.value\nheaderCmd = headerCmd + \",\" + msg.payload.format.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.maxTemp.value.toString();\nheaderCmd = headerCmd + \",\" + msg.payload.slopeType.value.toString();\nheaderCmd = headerCmd + \"\\n\";\ncmd.push(headerCmd);\n\n\nlet crvHeader = flow.get('crvHdrs')[adminTray.loadCrvNo.value];\ncrvHeader.name = msg.payload.name;\ncrvHeader.serialNo =  msg.payload.serialNo.value;\ncrvHeader.format = msg.payload.format.value;\ncrvHeader.maxTemp = msg.payload.maxTemp.value;\ncrvHeader.slopeType = msg.payload.slopeType.value;\n\nlet crv = JSON.parse(JSON.stringify(msg.payload));\n\nfor (let ii = 0; ii < msg.payload.crv.value[0].length; ++ii)\n{\n    let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n    ptCommand = ptCommand + \",\" + (ii + 1).toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[0][ii].toString();\n    ptCommand = ptCommand + \",\" + msg.payload.crv.value[1][ii].toString();\n    ptCommand = ptCommand + \"\\n\";\n    cmd.push(ptCommand);\n}\nif (msg.payload.crv.value[0].length < 199)\n{\n    for (let ii = msg.payload.crv.value[0].length; ii < 200; ++ii)\n    {\n        let ptCommand = \"CRVPT \" + adminTray.loadCrvNo.value.toString();\n        ptCommand = ptCommand + \",\" + (ii + 1).toString();\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \",0\";\n        ptCommand = ptCommand + \"\\n\";\n        cmd.push(ptCommand);\n    }\n}\nreturn {topic:\"loadCrv\", payload:cmd, rate:200, crv:crv};\n\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1070,
-        "y": 1120,
+        "x": 1040,
+        "y": 1160,
         "wires": [
             [
                 "e5d89e5ed9284bce"
@@ -1835,8 +1802,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1220,
-        "y": 1120,
+        "x": 1190,
+        "y": 1160,
         "wires": [
             [
                 "55ae80c209c5c3f8"
@@ -1854,8 +1821,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1350,
-        "y": 1120,
+        "x": 1320,
+        "y": 1160,
         "wires": [
             [
                 "f5423df11cb7301c"
@@ -1879,12 +1846,12 @@
         "drop": false,
         "allowrate": true,
         "outputs": 1,
-        "x": 1490,
-        "y": 1120,
+        "x": 1460,
+        "y": 1160,
         "wires": [
             [
-                "d348a0877f44c157",
-                "a6240f53adfc5095"
+                "a6240f53adfc5095",
+                "1c0abe742b96c607"
             ]
         ]
     },
@@ -1892,19 +1859,19 @@
         "id": "d348a0877f44c157",
         "type": "function",
         "z": "7cbe116050851432",
-        "name": "Check for end",
-        "func": "if (msg.parts.index < 200) return null;\nlet adminTray = flow.get('adminTray');\nadminTray.loadCrv.value = 0;\nadminTray.crvNo.value = adminTray.loadCrvNo.value;\nadminTray.crvName.value = msg.crv.name;\nadminTray.serialNo.value = msg.crv.serialNo.value;\nadminTray.format.value = msg.crv.format.value;\nadminTray.maxTemp.value = msg.crv.maxTemp.value;\nadminTray.slopeType.value = msg.crv.slopeType.value;\nadminTray.crv.value = JSON.parse(JSON.stringify(msg.crv.crv.value));\nflow.set('settingInProgress', false);\nflow.set('loadingCurve', false);\n\nreturn {topic:\"adminTray\",payload:adminTray};\n",
+        "name": "Update Admin",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.crvNo.value = adminTray.loadCrvNo.value;\nadminTray.crvName.value = msg.crv.name;\nadminTray.serialNo.value = msg.crv.serialNo.value;\nadminTray.format.value = msg.crv.format.value;\nadminTray.maxTemp.value = msg.crv.maxTemp.value;\nadminTray.slopeType.value = msg.crv.slopeType.value;\nadminTray.crv.value = JSON.parse(JSON.stringify(msg.crv.crv.value));\n\nlet traysConfig = flow.get('traysConfig');\nlet cmd = [];\nfor (let ii = 0; ii < traysConfig.length; ++ii)\n{\n    cmd.push(\"INCRV? \" + traysConfig[ii].tray.name + \"\\n\");\n}\nreturn {topic:\"INCRV\", payload:cmd, rate:200};\n",
         "outputs": 1,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1660,
-        "y": 1060,
+        "x": 1770,
+        "y": 1120,
         "wires": [
             [
-                "6095e5c1fec8b996"
+                "694c57959e688ea1"
             ]
         ]
     },
@@ -1917,8 +1884,8 @@
         "links": [
             "6b45b4c31fad6b8b"
         ],
-        "x": 1785,
-        "y": 1060,
+        "x": 2765,
+        "y": 1120,
         "wires": []
     },
     {
@@ -1933,8 +1900,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 370,
-        "y": 1320,
+        "x": 340,
+        "y": 1360,
         "wires": [
             [
                 "07c17a08f92d9036"
@@ -1954,8 +1921,8 @@
         "targetType": "full",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1880,
-        "y": 1320,
+        "x": 1850,
+        "y": 1360,
         "wires": []
     },
     {
@@ -1970,8 +1937,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 860,
-        "y": 1320,
+        "x": 830,
+        "y": 1360,
         "wires": [
             [
                 "b7cf4d34fc38b735"
@@ -1989,8 +1956,8 @@
         "arraySpltType": "len",
         "stream": false,
         "addname": "",
-        "x": 1010,
-        "y": 1320,
+        "x": 980,
+        "y": 1360,
         "wires": [
             [
                 "26b586a71526b5ea"
@@ -2013,8 +1980,8 @@
         "timeout": "",
         "count": "",
         "reduceRight": false,
-        "x": 1470,
-        "y": 1320,
+        "x": 1440,
+        "y": 1360,
         "wires": [
             [
                 "4ca5dc032fe47c0f"
@@ -2033,8 +2000,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1610,
-        "y": 1320,
+        "x": 1580,
+        "y": 1360,
         "wires": [
             [
                 "1a038a6a570f23b1"
@@ -2058,8 +2025,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 1150,
-        "y": 1320,
+        "x": 1120,
+        "y": 1360,
         "wires": [
             [
                 "74a4bdf5c1fafbf7"
@@ -2074,8 +2041,8 @@
         "property": "payload",
         "action": "obj",
         "pretty": false,
-        "x": 1750,
-        "y": 1320,
+        "x": 1720,
+        "y": 1360,
         "wires": [
             [
                 "e9373e33a10dd8ec"
@@ -2095,8 +2062,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 680,
-        "y": 1320,
+        "x": 650,
+        "y": 1360,
         "wires": [
             [
                 "f9703540f15762d4"
@@ -2116,8 +2083,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1320,
-        "y": 1320,
+        "x": 1290,
+        "y": 1360,
         "wires": [
             [
                 "258ab5d5fde9e468"
@@ -2145,8 +2112,8 @@
         "topic": "",
         "payload": "",
         "payloadType": "date",
-        "x": 210,
-        "y": 1320,
+        "x": 180,
+        "y": 1360,
         "wires": [
             [
                 "71ca84216edb79aa"
@@ -2170,8 +2137,8 @@
         "drop": false,
         "allowrate": false,
         "outputs": 1,
-        "x": 520,
-        "y": 1320,
+        "x": 490,
+        "y": 1360,
         "wires": [
             [
                 "2d507fd8c8759f56"
@@ -2191,8 +2158,8 @@
         "newline": "",
         "trim": false,
         "tls": "",
-        "x": 1700,
-        "y": 1120,
+        "x": 1650,
+        "y": 1160,
         "wires": [
             []
         ]
@@ -2209,8 +2176,8 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 1860,
-        "y": 820,
+        "x": 1320,
+        "y": 940,
         "wires": [
             [
                 "cffe9c2a52b1e43e"
@@ -2229,11 +2196,413 @@
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
-        "y": 840,
+        "x": 1370,
+        "y": 860,
         "wires": [
             [
                 "73efade75225a543"
+            ]
+        ]
+    },
+    {
+        "id": "4370633efa57b888",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "INCRV?",
+        "func": "flow.set('settingInProgress', true);\nlet channel = [\"A\", \"B\", \"C1\", \"C2\", \"C3\", \"C4\", \"C5\", \"D1\", \"D2\", \"D3\", \"D4\", \"D5\"];\nlet cmd = [];\nfor (let ichan in channel)\n{\n    cmd.push(\"INCRV? \" + channel[ichan] + \"\\n\");\n}\nreturn {topic:'incrv',payload:cmd, rate:200};\n",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1460,
+        "wires": [
+            [
+                "cc4ae1c2f246ae21"
+            ]
+        ]
+    },
+    {
+        "id": "d52ef0d52ae2a066",
+        "type": "inject",
+        "z": "7cbe116050851432",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 170,
+        "y": 1460,
+        "wires": [
+            [
+                "4370633efa57b888"
+            ]
+        ]
+    },
+    {
+        "id": "9d4e42f7c4923d56",
+        "type": "debug",
+        "z": "7cbe116050851432",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1490,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "3ef452c3675db879",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "0.5",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": true,
+        "outputs": 1,
+        "x": 780,
+        "y": 1460,
+        "wires": [
+            [
+                "37e2d49d36fa0e48"
+            ]
+        ]
+    },
+    {
+        "id": "71d9241c32ac0f66",
+        "type": "split",
+        "z": "7cbe116050851432",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 640,
+        "y": 1460,
+        "wires": [
+            [
+                "3ef452c3675db879"
+            ]
+        ]
+    },
+    {
+        "id": "73dc546d9f7eef22",
+        "type": "join",
+        "z": "7cbe116050851432",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1140,
+        "y": 1460,
+        "wires": [
+            [
+                "66aa41f9cb123536"
+            ]
+        ]
+    },
+    {
+        "id": "66aa41f9cb123536",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "parse incrv",
+        "func": "let channel = [\"A\", \"B\", \"C1\", \"C2\", \"C3\", \"C4\", \"C5\", \"D1\", \"D2\", \"D3\", \"D4\", \"D5\"];\nlet incrv = [];\nfor (let ichan in msg.payload)\n{\n    incrv.push({channel: channel[ichan], incrv: Number(msg.payload[ichan])});\n}\nflow.set('settingInProgress', false);\nreturn {topic:\"incrv\", payload:incrv};",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1300,
+        "y": 1460,
+        "wires": [
+            [
+                "9d4e42f7c4923d56"
+            ]
+        ]
+    },
+    {
+        "id": "37e2d49d36fa0e48",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 990,
+        "y": 1460,
+        "wires": [
+            [
+                "73dc546d9f7eef22"
+            ]
+        ]
+    },
+    {
+        "id": "cc4ae1c2f246ae21",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 490,
+        "y": 1460,
+        "wires": [
+            [
+                "71d9241c32ac0f66"
+            ]
+        ]
+    },
+    {
+        "id": "466a54f0d30d4f68",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Readback",
+        "func": "if (msg.read == null) flow.set('settingInProgress', false);\nreturn msg.read;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1840,
+        "y": 100,
+        "wires": [
+            [
+                "57d97f84a18da584"
+            ]
+        ]
+    },
+    {
+        "id": "57d97f84a18da584",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 2000,
+        "y": 100,
+        "wires": [
+            [
+                "f6fb53f8885978d2"
+            ]
+        ]
+    },
+    {
+        "id": "f8255e49fb58a283",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": true,
+        "outputs": 1,
+        "x": 2200,
+        "y": 1120,
+        "wires": [
+            [
+                "8d723622991290b2"
+            ]
+        ]
+    },
+    {
+        "id": "8d723622991290b2",
+        "type": "tcp request",
+        "z": "7cbe116050851432",
+        "name": "ls224Controller",
+        "server": "$(CONTROLLER_IP)",
+        "port": "$(CONTROLLER_PORT)",
+        "out": "char",
+        "ret": "string",
+        "splitc": "\\n",
+        "newline": "",
+        "trim": false,
+        "tls": "",
+        "x": 2370,
+        "y": 1120,
+        "wires": [
+            [
+                "917703dab546bc7d"
+            ]
+        ]
+    },
+    {
+        "id": "694c57959e688ea1",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1930,
+        "y": 1120,
+        "wires": [
+            [
+                "fe165b3dc9b99867"
+            ]
+        ]
+    },
+    {
+        "id": "de1c60d0e1c4a4c5",
+        "type": "function",
+        "z": "7cbe116050851432",
+        "name": "Parse crvNo",
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.loadCrv.value = 0;\n\nlet traysConfig = flow.get('traysConfig');\nfor (let ii = 0; ii < traysConfig.length; ++ii)\n{\n    traysConfig[ii].tray.crvNo.value = Number(msg.payload[ii])\n    traysConfig[ii].tray.crvSerialNo.value = flow.get('crvHdrs')[traysConfig[ii].tray.crvNo.value].name;\n}\nflow.set('settingInProgress', false);\nflow.set('loadingCurve', false);\nreturn {topic:\"adminTray\",payload:adminTray};\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2660,
+        "y": 1120,
+        "wires": [
+            [
+                "6095e5c1fec8b996"
+            ]
+        ]
+    },
+    {
+        "id": "fe165b3dc9b99867",
+        "type": "split",
+        "z": "7cbe116050851432",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "",
+        "x": 2060,
+        "y": 1120,
+        "wires": [
+            [
+                "f8255e49fb58a283"
+            ]
+        ]
+    },
+    {
+        "id": "917703dab546bc7d",
+        "type": "join",
+        "z": "7cbe116050851432",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": true,
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 2520,
+        "y": 1120,
+        "wires": [
+            [
+                "de1c60d0e1c4a4c5"
+            ]
+        ]
+    },
+    {
+        "id": "1c0abe742b96c607",
+        "type": "join",
+        "z": "7cbe116050851432",
+        "name": "",
+        "mode": "auto",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": "false",
+        "timeout": "",
+        "count": "",
+        "reduceRight": false,
+        "x": 1620,
+        "y": 1120,
+        "wires": [
+            [
+                "d348a0877f44c157"
             ]
         ]
     },
