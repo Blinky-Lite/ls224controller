@@ -1524,8 +1524,8 @@
         "links": [
             "f882c2407b2620be"
         ],
-        "x": 1535,
-        "y": 640,
+        "x": 1605,
+        "y": 660,
         "wires": []
     },
     {
@@ -1582,8 +1582,8 @@
         "type": "function",
         "z": "7cbe116050851432",
         "name": "crvNo",
-        "func": "let adminTray = flow.get('adminTray');\nadminTray.crvNo.value = msg.payload.value;\nlet crvHdr = flow.get('crvHdrs')[msg.payload.value];\n\nlet trayProps  = flow.get('trayProps');\n\nlet getCrvMsg =\n{\n    topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].name + '/echo',\n    payload: { topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].name + '/setting/' + trayProps.type + '/crvNo' }\n};\nreturn getCrvMsg;\n",
-        "outputs": 1,
+        "func": "let adminTray = flow.get('adminTray');\nadminTray.crvNo.value = msg.payload.value;\nlet crvHdr = flow.get('crvHdrs')[msg.payload.value];\n\nlet trayProps  = flow.get('trayProps');\n\nlet getCrvMsg =\n{\n    topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].serialNo + '/echo',\n    payload: { topic: trayProps.box + '/tray/' + trayProps.curveType + '/' + flow.get('crvHdrs')[msg.payload.value].serialNo + '/setting/' + trayProps.type + '/crvNo' }\n};\nadminTray.serialNo.value = \"none\";\nadminTray.format.value = 1;\nadminTray.maxTemp.value = 1;\nadminTray.slopeType.value = 1;\nadminTray.crvName.value = \"none\";\nadminTray.crv.value = [[1,10],[1,1]];\nreturn [getCrvMsg, {topic:'adminTray', payload:adminTray}];\n",
+        "outputs": 2,
         "timeout": 0,
         "noerr": 0,
         "initialize": "",
@@ -1593,7 +1593,10 @@
         "y": 620,
         "wires": [
             [
-                "6d157e7e74fbe682"
+                "f9c87bf5605c0723"
+            ],
+            [
+                "73efade75225a543"
             ]
         ]
     },
@@ -2603,6 +2606,31 @@
         "wires": [
             [
                 "d348a0877f44c157"
+            ]
+        ]
+    },
+    {
+        "id": "f9c87bf5605c0723",
+        "type": "delay",
+        "z": "7cbe116050851432",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "200",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1490,
+        "y": 600,
+        "wires": [
+            [
+                "6d157e7e74fbe682"
             ]
         ]
     },
